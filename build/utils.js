@@ -97,3 +97,9 @@ exports.createNotifierCallback = () => {
     })
   }
 }
+
+// 找到项目根目录
+exports.resolve = (dir) => {
+  return path.join(__dirname, '../../../', dir)
+}
+

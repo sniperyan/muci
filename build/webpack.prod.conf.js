@@ -20,6 +20,8 @@ const loaders = utils.styleLoaders({
   extract: true,
   usePostCSS: true
 })
+
+
 const webpackConfig = merge(baseWebpackConfig, {
   module: {
     rules: loaders

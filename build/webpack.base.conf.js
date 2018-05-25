@@ -4,7 +4,7 @@ const utils = require('./utils')
 const config = require('../config')
 
 function resolve (dir) {
-  return path.join(__dirname, '..', dir)
+  return utils.resolve(dir)
 }
 
 const createLintingRule = () => ({
@@ -19,10 +19,10 @@ const createLintingRule = () => ({
 })
 
 module.exports = {
-  context: path.resolve(__dirname, '../'),   //基础目录，绝对路径，用于从配置中解析入口起点(entry point)和 loader
-  entry: {
-    app: './src/main.js'
-  },
+  context: resolve('./'),   //基础目录，绝对路径，用于从配置中解析入口起点(entry point)和 loader
+  entry: process.env.NODE_ENV === 'production'
+  ? config.build.entry
+  : config.dev.entry,
   output: {
     path: config.build.assetsRoot,   //output 目录对应一个绝对路径。
     /**
