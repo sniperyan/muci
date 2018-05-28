@@ -20,7 +20,7 @@ const createLintingRule = () => ({
 
 module.exports = {
   context: resolve('./'),   //基础目录，绝对路径，用于从配置中解析入口起点(entry point)和 loader
-  entry: process.env.NODE_ENV === 'production'
+  entry: (process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'testing')
   ? config.build.entry
   : config.dev.entry,
   output: {
@@ -31,7 +31,7 @@ module.exports = {
      * 使用入口名称：filename: "[name].js"
      */
     filename: '[name].js',  
-    publicPath: process.env.NODE_ENV === 'production'
+    publicPath: (process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'testing')
       ? config.build.assetsPublicPath
       : config.dev.assetsPublicPath
   },

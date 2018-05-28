@@ -10,6 +10,9 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin')
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
+const packageJson = require(`${utils.resolve('package.json')}`)
+const packageVersion = packageJson.version
+const packageCVersion = packageJson.cversion
 
 const env = process.env.NODE_ENV === 'testing'
   ? require('../config/test.env')
@@ -21,6 +24,9 @@ const loaders = utils.styleLoaders({
   usePostCSS: true
 })
 
+// console.log(process.env.NODE_ENV)
+// console.log(packageJson.version)
+// console.log(packageJson.cversion)
 
 const webpackConfig = merge(baseWebpackConfig, {
   module: {
@@ -29,8 +35,12 @@ const webpackConfig = merge(baseWebpackConfig, {
   devtool: config.build.productionSourceMap ? config.build.devtool : false,
   output: {
     path: config.build.assetsRoot,
-    filename: utils.assetsPath('js/[name].[chunkhash].js'),
-    chunkFilename: utils.assetsPath('js/[id].[chunkhash].js')
+    filename: process.env.NODE_ENV === 'testing'
+    ? utils.assetsPath(`js/[name].${packageVersion}.${packageCVersion}.[chunkhash].js`)
+    : utils.assetsPath(`js/[name].${packageVersion}.[chunkhash].js`),
+    chunkFilename: process.env.NODE_ENV === 'testing'
+    ? utils.assetsPath(`js/[id].${packageVersion}.${packageCVersion}.[chunkhash].js`)
+    : utils.assetsPath(`js/[id].${packageVersion}.[chunkhash].js`)
   },
   plugins: [
     new webpack.DefinePlugin({
@@ -47,7 +57,10 @@ const webpackConfig = merge(baseWebpackConfig, {
     }),
     // extract css into its own file
     new ExtractTextPlugin({
-      filename: utils.assetsPath('css/[name].[contenthash].css'),
+      // filename: utils.assetsPath('css/[name].[contenthash].css'),
+      filename: process.env.NODE_ENV === 'testing'
+      ? utils.assetsPath(`css/[name].${packageVersion}.${packageCVersion}.[contenthash].css`)
+      : utils.assetsPath(`css/[name].${packageVersion}.[contenthash].css`),
       allChunks: true,
     }),
     // Compress extracted CSS. We are using this plugin so that possible
@@ -61,11 +74,13 @@ const webpackConfig = merge(baseWebpackConfig, {
     // you can customize output by editing /index.html
     // see https://github.com/ampedandwired/html-webpack-plugin
     new HtmlWebpackPlugin({
-      filename: process.env.NODE_ENV === 'testing'
-        ? 'index.html'
-        : config.build.index,
+      // filename: process.env.NODE_ENV === 'testing'
+      //   ? 'index.html'
+      //   : config.build.index,
+      filename: config.build.index,
       template: 'index.html',
       inject: true,
+      favicon:config.build.favicon,
       minify: {
         removeComments: true,
         collapseWhitespace: true,
