@@ -1,98 +1,82 @@
-'use strict'
-const utils = require('./utils')
-const webpack = require('webpack')
-const config = require('../config')
-const merge = require('webpack-merge')
-const path = require('path')
-const baseWebpackConfig = require('./webpack.base.conf')
-const CopyWebpackPlugin = require('copy-webpack-plugin')
-const HtmlWebpackPlugin = require('html-webpack-plugin')
-const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin')
-const portfinder = require('portfinder')
+'use strict';
+const fs = require('fs');
+const utils = require('./utils');
+const webpack = require('webpack');
+const config = require('../config');
+const merge = require('webpack-merge');
+const path = require('path');
+const baseWebpackConfig = require('./webpack.base.conf');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin');
+const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
+const InterpolateHtmlPlugin = require('./InterpolateHtmlPlugin');
+const portfinder = require('portfinder');
+const loaders = utils.styleLoaders({ sourceMap: config.dev.cssSourceMap, usePostCSS: true });
 
-const HOST = process.env.HOST
-const PORT = process.env.PORT && Number(process.env.PORT)
+// add hot-reload related code to entry chunks
+Object.keys(baseWebpackConfig.entry).forEach(function(name) {
+  baseWebpackConfig.entry[name] = [__dirname + '/dev-client'].concat(baseWebpackConfig.entry[name]);
+});
 
-const loaders = utils.styleLoaders({ sourceMap: config.dev.cssSourceMap, usePostCSS: true })
+const env = utils.getClientEnvironment(config.dev.publicUrl);
 
-const devWebpackConfig = merge(baseWebpackConfig, {
+
+module.exports = merge(baseWebpackConfig, {
   module: {
-    rules: loaders
+    rules: loaders,
   },
   // cheap-module-eval-source-map is faster for development
   devtool: config.dev.devtool,
-
-  // these devServer options should be customized in /config/index.js
-  devServer: {
-    clientLogLevel: 'warning',
-    historyApiFallback: {
-      rewrites: [
-        { from: /.*/, to: path.posix.join(config.dev.assetsPublicPath, 'index.html') },
-      ],
-    },
-    hot: true,
-    contentBase: false, // since we use CopyWebpackPlugin.
-    compress: true,
-    host: HOST || config.dev.host,
-    port: PORT || config.dev.port,
-    open: config.dev.autoOpenBrowser,
-    overlay: config.dev.errorOverlay
-      ? { warnings: false, errors: true }
-      : false,
-    publicPath: config.dev.assetsPublicPath,
-    proxy: config.dev.proxyTable,
-    quiet: true, // necessary for FriendlyErrorsPlugin
-    watchOptions: {
-      poll: config.dev.poll,
-    }
-  },
   plugins: [
-    new webpack.DefinePlugin({
-      'process.env': require('../config/dev.env')
-    }),
+    new InterpolateHtmlPlugin({PUBLIC_URL: config.dev.publicUrl}),
+    // Add module names to factory functions so they appear in browser profiler.
+    new webpack.NamedModulesPlugin(),
+    new webpack.DefinePlugin(env.stringified),
+    // https://github.com/glenjamin/webpack-hot-middleware#installation--usage
     new webpack.HotModuleReplacementPlugin(),
-    new webpack.NamedModulesPlugin(), // HMR shows correct file names in console on update.
     new webpack.NoEmitOnErrorsPlugin(),
+    // Watcher doesn't work well if you mistype casing in a path so we use
+    // a plugin that prints an error when you attempt to do this.
+    // See https://github.com/facebookincubator/create-react-app/issues/240
+    new CaseSensitivePathsPlugin(),
     // https://github.com/ampedandwired/html-webpack-plugin
+
+    // process.env.RUN_PWA ? new HtmlWebpackPlugin({
+    //   filename: 'index.html',
+    //   template: config.dev.appHtml, // Generates an `index.html` file with the <script> injected.
+    //   inject: true,
+    //   favicon: config.dev.favicon,
+    //   serviceWorkerLoader: `<script>${fs.readFileSync(path.join(__dirname,
+    //     './service-worker-dev.js'), 'utf-8')}</script>`
+    // }) : new HtmlWebpackPlugin({
+    //   filename: 'index.html',
+    //   template: config.dev.appHtml, // Generates an `index.html` file with the <script> injected.
+    //   inject: true,
+    //   favicon: config.dev.favicon
+    // }),
     new HtmlWebpackPlugin({
       filename: 'index.html',
-      template: 'index.html',
+      template: config.dev.appHtml, // Generates an `index.html` file with the <script> injected.
       inject: true,
-      favicon: config.dev.favicon
+      favicon: config.dev.favicon,
     }),
+
+
     // copy custom static assets
     // new CopyWebpackPlugin([
     //   {
-    //     from: path.resolve(__dirname, '../static'),
+    //     from: utils.resolve('./static'),
     //     to: config.dev.assetsSubDirectory,
     //     ignore: ['.*']
     //   }
-    // ])
-  ]
-})
-
-module.exports = new Promise((resolve, reject) => {
-  portfinder.basePort = process.env.PORT || config.dev.port
-  portfinder.getPort((err, port) => {
-    if (err) {
-      reject(err)
-    } else {
-      // publish the new Port, necessary for e2e tests
-      process.env.PORT = port
-      // add port to devServer config
-      devWebpackConfig.devServer.port = port
-
-      // Add FriendlyErrorsPlugin
-      devWebpackConfig.plugins.push(new FriendlyErrorsPlugin({
-        compilationSuccessInfo: {
-          messages: [`Your application is running here: http://${devWebpackConfig.devServer.host}:${port}`],
-        },
-        onErrors: config.dev.notifyOnErrors
-        ? utils.createNotifierCallback()
-        : undefined
-      }))
-
-      resolve(devWebpackConfig)
-    }
-  })
-})
+    // ]),
+    new FriendlyErrorsPlugin(),
+    // Moment.js is an extremely popular library that bundles large locale files
+    // by default due to how Webpack interprets its code. This is a practical
+    // solution that requires the user to opt into importing specific locales.
+    // https://github.com/jmblog/how-to-optimize-momentjs-with-webpack
+    // You can remove this if you don't use Moment.js:
+    new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
+  ],
+});

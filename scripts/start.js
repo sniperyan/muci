@@ -1,8 +1,12 @@
-const spawn = require('cross-spawn');
+const shell = require('shelljs');
 const path = require('path');
-const buildJs = path.join(__dirname, '..', 'build/webpack.dev.conf.js');
-spawn.sync(
-  'node_modules/.bin/webpack-dev-server',
-  ['--inline', '--progress', '--config', buildJs],
-  { stdio: 'inherit' }
-);
+const buildJs = path.join(__dirname, '..', 'build/dev-server.js');
+// const args = process.argv.slice(2);
+
+// if(args[0] === 'pwa'){
+//   shell.exec(`cross-env NODE_ENV=development RUN_PWA=true node ${buildJs}`);
+// }else {
+//   shell.exec(`cross-env NODE_ENV=development node ${buildJs}`);
+// }
+shell.exec(`cross-env NODE_ENV=development node ${buildJs}`);
+
