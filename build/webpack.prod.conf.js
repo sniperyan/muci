@@ -26,7 +26,11 @@ const loaders = utils.styleLoaders({
   extract: true,
   usePostCSS: true,
 });
-
+let plugins = [];
+if(config.build.useServiceWorker){
+  // service worker caching
+  plugins.push(new SWPrecacheWebpackPlugin(config.build.SWPrecacheSettings))
+}
 
 const webpackConfig = merge(baseWebpackConfig, {
   module: {
@@ -88,9 +92,7 @@ const webpackConfig = merge(baseWebpackConfig, {
         // https://github.com/kangax/html-minifier#options-quick-reference
       },
       // necessary to consistently work with multiple chunks via CommonsChunkPlugin
-      chunksSortMode: 'dependency',
-      serviceWorkerLoader: `<script>${loadMinified(path.join(__dirname,
-        './service-worker-prod.js'))}</script>`,
+      chunksSortMode: 'dependency'
     }),
     // keep module.id stable when vendor modules does not change
     new webpack.HashedModuleIdsPlugin(),
@@ -142,9 +144,6 @@ const webpackConfig = merge(baseWebpackConfig, {
     new ManifestPlugin({
       fileName: 'asset-manifest.json',
     }),
-
-    // service worker caching
-    new SWPrecacheWebpackPlugin(config.build.SWPrecacheSettings), 
     
     // Moment.js is an extremely popular library that bundles large locale files
     // by default due to how Webpack interprets its code. This is a practical
@@ -152,7 +151,7 @@ const webpackConfig = merge(baseWebpackConfig, {
     // https://github.com/jmblog/how-to-optimize-momentjs-with-webpack
     // You can remove this if you don't use Moment.js:
     new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
-  ],
+  ].concat(plugins),
 });
 
 if (config.build.productionGzip) {
