@@ -1,12 +1,14 @@
 {
   "name": "wym-react-build",
-  "version": "1.0.12",
+  "version": "1.0.13",
   "description": "",
   "main": "",
   "scripts": {
     "cp-dev":"cp patch/build/dev/utils.js build/utils.js && cp patch/config/dev/index.js config/index.js",
     "start": "npm run cp-dev && node scripts/start.js",
-    "fix": "eslint --fix demo/src demo/config bin build config scripts patch"
+    "fix": "eslint --fix demo/src demo/config bin build config scripts patch",
+    "cp-publish":"cp patch/build/publish/utils.js build/utils.js && cp patch/config/publish/index.js config/index.js",
+    "prepublishOnly":"npm run fix && npm run cp-publish"
   },
   "author": "",
   "devDependencies": {
