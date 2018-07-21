@@ -1,0 +1,68 @@
+@import url("//at.alicdn.com/t/font_550949_nwg9tvndi996bt9.css");
+
+:global{
+  html{
+    height: 100%;
+  }
+  body{
+    height: 100%;
+    padding: 0px;
+    margin: 0px;
+    color: #333;
+  }
+  #app{
+    height: 100%;
+    >div{
+      // height: 100%;
+    }
+  }
+
+  // layout
+  .ant-layout{
+    min-height: 100%;
+    height: auto;
+    background: #f5f5f5;
+  }
+
+  .ant-layout-footer{
+    color: #aaa;
+  }
+
+  // tabs
+  .ant-tabs-nav .ant-tabs-tab{
+    margin-right: 0px;
+  }
+
+  // selectTree
+  .ant-select-tree-dropdown{
+    max-height: 50vh !important;
+  }
+  .ant-radio-wrapper {
+    display: inline-block;
+  }
+
+  .ant-form-extra {
+    font-size: 12px;
+  }
+}
+
+// scroll
+::-webkit-scrollbar-thumb {
+  background-color: #f0f2f5*0.85;
+  border-left: 4px solid transparent;
+}
+::-webkit-scrollbar-track {
+  background-color: #f0f2f5;
+  border-left: 4px solid transparent;
+}
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+// temp fix for https://github.com/ant-design/ant-design/commit/a1fafb5b727b62cb0be29ce6e9eca8f579d4f8b7
+:global {
+  .ant-spin-container {
+    overflow: visible !important;
+  }
+}

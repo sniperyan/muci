@@ -1,0 +1,37 @@
+
+// base
+
+@blue-color: #1e90ff;
+@font-color3: #333333;
+@font-color6: #666666;
+@font-color9: #999999;
+
+@bg-white: #ffffff;
+@border-grey: #e8e8e8;
+@bg-color-global: #f5f5f5;
+
+
+
+// clearfix
+
+.clearfix(){
+  &:after{
+    content: "";
+    display: block;
+    clear: both;
+  }
+  zoom:1;
+}
+
+// font
+
+.label-font(){
+  color: rgba(0, 0, 0, 0.45);
+  font-size: 12px;
+}
+
+.prompt-font(){
+  color: rgba(0, 0, 0, 0.85);
+  font-size: 14px;
+  font-weight: 500;
+}

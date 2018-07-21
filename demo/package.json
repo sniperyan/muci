@@ -1,0 +1,43 @@
+{
+  "name": "cli-demo-liyan",
+  "author": "wym",
+  "version": "1.0.0",
+  "cversion": "c052201",
+  "description": "",
+  "main": "",
+  "scripts": {
+    "dev": "npm start",
+    "start": "npm run fix && wym-react-build start",
+    "test": "rm -rf dist && wym-react-build test",
+    "lint": "eslint --ext .jsx,.js src test/unit test/e2e/specs",
+    "fix": "eslint --fix src",
+    "dist": "npm run build",
+    "build": "rm -rf dist && wym-react-build build"
+  },
+  "dependencies": {
+    "antd": "^3.5.3",
+    "babel-polyfill": "^6.26.0",
+    "classnames": "^2.2.6",
+    "echarts": "^4.1.0",
+    "echarts-for-react": "^2.0.11",
+    "isomorphic-fetch": "^2.2.1",
+    "prop-types": "^15.6.1",
+    "qs": "^6.5.2",
+    "react": "^16.4.0",
+    "react-dom": "^16.4.0",
+    "react-loadable": "^5.4.0",
+    "react-modal": "^3.4.5",
+    "react-redux": "^5.0.7",
+    "react-router-dom": "^4.2.2",
+    "redux": "^4.0.0",
+    "redux-thunk": "^2.2.0"
+  },
+  "devDependencies": {
+    "pre-commit": "^1.2.2",
+    "wym-react-build": "^1.0.0"
+  },
+  "pre-commit": [
+    "lint"
+  ],
+  "license": "ISC"
+}
