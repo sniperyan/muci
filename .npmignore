@@ -16,5 +16,6 @@ selenium-debug.log
 *.njsproj
 *.sln
 
-# demo code
+# dev code
 demo/
+patch/
