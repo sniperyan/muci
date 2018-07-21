@@ -4,13 +4,14 @@
   "description": "",
   "main": "",
   "scripts": {
-    "start": "node scripts/start.js",
-    "fix": "eslint --fix demo/src demo/config bin build config scripts",
-    "build":"rm -rf lib && babel bin --out-dir lib/bin"
+    "cp-dev":"cp patch/build/dev/utils.js build/utils.js && cp patch/config/dev/index.js config/index.js",
+    "start": "npm run cp-dev && node scripts/start.js",
+    "fix": "eslint --fix demo/src demo/config bin build config scripts patch"
   },
   "author": "",
   "devDependencies": {
     "antd": "^3.5.3",
+    "babel-cli": "^6.26.0",
     "babel-polyfill": "^6.26.0",
     "classnames": "^2.2.6",
     "isomorphic-fetch": "^2.2.1",
