@@ -6,7 +6,6 @@ import logo from '../../../assets/logo.svg';
 import { Link } from 'react-router-dom';
 import styles1 from './app.css';
 import styles2 from './app.less';
-import styles3 from './app.scss';
 
 @connect(
   state => ({
@@ -34,7 +33,6 @@ class Home extends PureComponent {
         <h2>{count}</h2>
         <p className={styles1.test}>测试css</p>
         <p className={styles2.test}>测试less</p>
-        <p className={styles3.test}>测试scss</p>
         <button onClick={this.click}>add</button>
         <img src={logo} alt="logo" />
         <Link to="/about">To About</Link>

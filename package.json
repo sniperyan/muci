@@ -1,14 +1,14 @@
 {
   "name": "wym-react-build",
-  "version": "1.0.14",
+  "version": "1.0.15",
   "description": "",
   "main": "",
   "scripts": {
-    "cp-dev":"cp patch/build/dev/utils.js build/utils.js && cp patch/config/dev/index.js config/index.js",
+    "cp-dev": "cp patch/build/dev/utils.js build/utils.js && cp patch/config/dev/index.js config/index.js",
     "start": "npm run cp-dev && node scripts/start.js",
     "fix": "eslint --fix demo/src demo/config bin build config scripts patch",
-    "cp-publish":"cp patch/build/publish/utils.js build/utils.js && cp patch/config/publish/index.js config/index.js",
-    "prepublishOnly":"npm run fix && npm run cp-publish"
+    "cp-publish": "cp patch/build/publish/utils.js build/utils.js && cp patch/config/publish/index.js config/index.js",
+    "prepublishOnly": "npm run fix && npm run cp-publish"
   },
   "author": "",
   "devDependencies": {
@@ -73,8 +73,6 @@
     "jest": "^22.0.4",
     "less-loader": "^4.0.5",
     "less": "2.7.2",
-    "sass-loader": "^7.0.1",
-    "node-sass": "^4.9.0",
     "nightwatch": "^0.9.12",
     "node-notifier": "^5.1.2",
     "optimize-css-assets-webpack-plugin": "^3.2.0",
@@ -84,7 +82,6 @@
     "postcss-loader": "^2.0.8",
     "postcss-url": "^7.2.1",
     "rimraf": "^2.6.0",
-    "selenium-server": "^3.0.1",
     "semver": "^5.3.0",
     "shelljs": "^0.7.6",
     "style-loader": "0.19.0",
