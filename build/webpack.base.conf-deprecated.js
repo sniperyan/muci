@@ -2,6 +2,7 @@
 const path = require('path');
 const utils = require('./utils');
 const config = require('../config');
+const PnpWebpackPlugin = require('pnp-webpack-plugin');
 
 function resolve(dir) {
   return utils.resolve(dir);
@@ -9,13 +10,30 @@ function resolve(dir) {
 
 const createLintingRule = () => ({
   test: /\.(js|jsx)$/,
-  loader: 'eslint-loader',
+  // loader: 'eslint-loader',
   enforce: 'pre',
+  use: [
+    {
+      options: {
+        formatter: require('eslint-friendly-formatter'),
+        eslintPath: require.resolve('eslint'),
+        // // @remove-on-eject-begin
+        // baseConfig: {
+        //   extends: [require.resolve('eslint-config-react-app')],
+        //   settings: { react: { version: '999.999.999' } },
+        // },
+        // ignore: false,
+        // useEslintrc: false,
+        // @remove-on-eject-end
+      },
+      loader: require.resolve('eslint-loader'),
+    },
+  ],
   include: [resolve('src'), resolve('test')],
-  options: {
-    formatter: require('eslint-friendly-formatter'),
-    emitWarning: !config.dev.showEslintErrorsInOverlay,
-  },
+  // options: {
+  //   formatter: require('eslint-friendly-formatter'),
+  //   emitWarning: !config.dev.showEslintErrorsInOverlay,
+  // },
 });
 
 module.exports = {
@@ -24,6 +42,8 @@ module.exports = {
     ? config.build.entry
     : config.dev.entry,
   output: {
+    // Add /* filename */ comments to generated require()s in the output.
+    pathinfo: true,
     path: config.build.assetsRoot,   //output 目录对应一个绝对路径。
     // This does not produce a real file. It's just the virtual path that is
     // served by WebpackDevServer in development. This is the JS bundle
@@ -40,12 +60,29 @@ module.exports = {
   },
   resolve: {
     extensions: ['.js', '.jsx', '.json'],
-    alias: {
-     
-    },
+    alias: (process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'testing')
+      ? config.build.alias
+      : config.dev.alias,
+    // Adds support for installing with Plug'n'Play, leading to faster installs and adding
+    // guards against forgotten dependencies and such.
+    plugins: [
+      // Adds support for installing with Plug'n'Play, leading to faster installs and adding
+      // guards against forgotten dependencies and such.
+      PnpWebpackPlugin,
+    ],
+  },
+  resolveLoader: {
+    plugins: [
+      // Also related to Plug'n'Play, but this time it tells Webpack to load its loaders
+      // from the current package.
+      PnpWebpackPlugin.moduleLoader(module),
+    ],
   },
   module: {
+    strictExportPresence: true,
     rules: [
+      // Disable require.ensure as it's not a standard language feature.
+      { parser: { requireEnsure: false } },
       ...(config.dev.useEslint ? [createLintingRule()] : []),
       {
         test: /\.(js|jsx)$/,
@@ -87,4 +124,7 @@ module.exports = {
     tls: 'empty',
     child_process: 'empty',
   },
+  // Turn off performance processing because we utilize
+  // our own hints via the FileSizeReporter
+  performance: false,
 };

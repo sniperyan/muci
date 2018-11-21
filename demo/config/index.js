@@ -13,19 +13,22 @@ module.exports = {
      * Paths
      */
     //工程入口文件
-    entry: {
-      app: resolve('../src/index.js'),
-    },
+    entry: resolve('../src/index.js'),
     //静态资源二级目录名称
     assetsSubDirectory: 'static',   
     // CDN 地址
     assetsPublicPath: '/',   
-    // 设置代理  https://webpack.js.org/configuration/dev-server/#devserver-proxy 
-    proxyTable: {},
+    // // 设置代理  https://facebook.github.io/create-react-app/docs/proxying-api-requests-in-development#configuring-the-proxy-manually
+    proxySetup: resolve('../src/setupProxy.js'),
+    // proxyTable: {},
+
     //favicon
     favicon: resolve('../public/favicon.ico'),
     appHtml: resolve('../public/index.html'),
 
+    alias:{
+      'react-native': 'react-native-web',
+    },
     /**
      * Various Dev Server settings
      */
@@ -72,9 +75,7 @@ module.exports = {
      * Paths
      */
     //工程入口文件
-    entry: {
-      app: resolve('../src/index.js'),
-    },
+    entry: resolve('../src/index.js'),
     //根目录
     assetsRoot: resolve('../dist'),
     //静态资源二级目录名称
@@ -84,11 +85,15 @@ module.exports = {
     //favicon
     favicon: resolve('../public/favicon.ico'),
     appHtml: resolve('../public/index.html'),
+
+    alias: {
+      'react-native': 'react-native-web',
+    },
     /**
      * Source Maps
      */
 
-    productionSourceMap: true,
+    productionSourceMap: false,
     // https://webpack.js.org/configuration/devtool/#production
     devtool: '#source-map',
 

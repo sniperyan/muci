@@ -7,7 +7,10 @@ const path = require('path');
 const express = require('express');
 const webpack = require('webpack');
 const proxyMiddleware = require('http-proxy-middleware');
-const webpackConfig = require('./webpack.dev.conf');
+const webpackConfig = require('./webpack.dev.conf-deprecated');
+const utils = require('./utils');
+const isInteractive = process.stdout.isTTY;
+
 
 // default port where dev server listens for incoming traffic
 const port = process.env.PORT || config.dev.port;
@@ -67,7 +70,9 @@ let _resolve;
 const readyPromise = new Promise(resolve => {
   _resolve = resolve;
 });
-
+if (isInteractive) {
+  utils.clearConsole();
+}
 console.log('> Starting dev server...');
 devMiddleware.waitUntilValid(() => {
   console.log('> Listening at ' + uri + '\n');

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Spin } from 'antd';
-import styles from './index.less';
+import styles from './index.module.less';
 import Exception from '../exception';
 import { Link } from 'react-router-dom';
 

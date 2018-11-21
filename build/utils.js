@@ -166,8 +166,8 @@ exports.createNotifierCallback = () => {
 // 找到项目根目录
 exports.resolve = (dir) => {
   //TODO:npm环境
-  return path.join(__dirname, '../../../', dir);  
-  // return path.join(__dirname, '../demo/', dir);
+  // return path.join(__dirname, '../../../', dir);  
+  return path.join(__dirname, '../demo/', dir);
 };
 
 const appDirectory = fs.realpathSync(process.cwd());
@@ -206,4 +206,12 @@ exports.getClientEnvironment = publicUrl => {
 
   return { raw, stringified };
 };
+
+// clearConsole
+exports.clearConsole = () => {
+  process.stdout.write(
+    process.platform === 'win32' ? '\x1B[2J\x1B[0f' : '\x1B[2J\x1B[3J\x1B[H'
+  );
+};
+
 

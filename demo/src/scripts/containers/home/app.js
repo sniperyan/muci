@@ -4,8 +4,9 @@ import { bindActionCreators } from 'redux';
 import * as homeAction from '../../actions/home';
 import logo from '../../../assets/logo.svg';
 import { Link } from 'react-router-dom';
-import styles1 from './app.css';
-import styles2 from './app.less';
+import styles1 from './app.module.css';
+import styles2 from './app.module.less';
+import './noModule.css';
 
 @connect(
   state => ({
@@ -27,12 +28,14 @@ class Home extends PureComponent {
   }
   render() {
     const {count} = this.props;
+    
     return (
       <div>
         <h1 >Home1</h1>
         <h2>{count}</h2>
         <p className={styles1.test}>测试css</p>
         <p className={styles2.test}>测试less</p>
+        <p className="ttt">测试非模块化</p>
         <button onClick={this.click}>add</button>
         <img src={logo} alt="logo" />
         <Link to="/about">To About</Link>

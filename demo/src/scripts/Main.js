@@ -8,7 +8,7 @@ import moment from 'moment';
 import 'moment/locale/zh-cn';
 import createBrowserHistory from 'history/createBrowserHistory';
 import Home from './containers/home';
-import About from './containers/about';
+// import About from './containers/about';
 import configureStore from './store';
 
 
@@ -24,7 +24,7 @@ function Main() {
       <Provider store={store}>
         <Router history={history}>
           <Switch>
-            <Route path="/about" component={About} />
+            {/* <Route path="/about" component={About} /> */}
             <Route path="/home" component={Home} />
             <Route component={Home} />
           </Switch>
