@@ -166,8 +166,8 @@ exports.createNotifierCallback = () => {
 // 找到项目根目录
 exports.resolve = (dir) => {
   //TODO:npm环境
-  // return path.join(__dirname, '../../../', dir);  
-  return path.join(__dirname, '../demo/', dir);
+  return path.join(__dirname, '../../../', dir);  
+  // return path.join(__dirname, '../demo/', dir);
 };
 
 const appDirectory = fs.realpathSync(process.cwd());
