@@ -26,7 +26,7 @@ module.exports = {
           pathRewrite: {'^/proxy' : ''},
           secure: false,  //A backend server running on HTTPS with an invalid certificate will not be accepted by default
         },
-      }
+      },
     },
 
     //do not check the host are vulnerable to DNS rebinding attacks

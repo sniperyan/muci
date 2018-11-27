@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
-/*eslint no-console: "off"*/
+/*eslint no-console: "off" */
+/*eslint no-fallthrough: "off" */
 'use strict';
 // Makes the script crash on unhandled rejections instead of silently
 // ignoring them. In the future, promise rejections that are not handled will

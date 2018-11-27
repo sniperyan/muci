@@ -1,11 +1,4 @@
-// @remove-on-eject-begin
-/**
- * Copyright (c) 2015-present, Facebook, Inc.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- */
-// @remove-on-eject-end
+/*eslint no-console: 'off'*/
 'use strict';
 
 // Do this as the first thing so that any code reading it knows the right env.
@@ -36,11 +29,11 @@ const chalk = require('chalk');
 const webpack = require('webpack');
 const WebpackDevServer = require('webpack-dev-server');
 const clearConsole = require('../dev-utils/clearConsole');
-const checkRequiredFiles = require('../dev-utils/checkRequiredFiles');
+// const checkRequiredFiles = require('../dev-utils/checkRequiredFiles');
 const {
   choosePort,
   createCompiler,
-  prepareProxy,
+  // prepareProxy,
   prepareUrls,
 } = require('../dev-utils/WebpackDevServerUtils');
 const openBrowser = require('../dev-utils/openBrowser');
@@ -181,7 +174,7 @@ checkBrowsers(resolve('./'), isInteractive)
         clearConsole();
       }
       console.log(chalk.cyan('Starting the development server...\n'));
-      autoOpenBrowser && openBrowser(urls.localUrlForBrowser);
+      return autoOpenBrowser && openBrowser(urls.localUrlForBrowser);
     });
 
     ['SIGINT', 'SIGTERM'].forEach(function(sig) {

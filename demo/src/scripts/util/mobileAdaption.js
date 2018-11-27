@@ -7,7 +7,7 @@ export default function() {
   var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1; //android终端
   // var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
   if (isAndroid) {
-    //安卓
+    //android
     rem = docEl.clientWidth / 10;
     metaEl.setAttribute('content', 'width=' + docEl.clientWidth + ',initial-scale=' + 1 + ',maximum-scale=' + 1 + ', minimum-scale=' + 1 + ',user-scalable=no');
     docEl.firstElementChild.appendChild(fontEl);
