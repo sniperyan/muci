@@ -75,7 +75,6 @@ export default function request(url, options, mockData) {
   }
 
   /**
-   * 后端根据国标，有部分数据会塞入header，比如分页数据
    * 返回值示例：
    * {
    *  body:{},

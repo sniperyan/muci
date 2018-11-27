@@ -49,7 +49,7 @@ const shouldUseRelativeAssetPaths = publicPath === './';
 const shouldUseSourceMap = config.build.productionSourceMap;
 // Some apps do not need the benefits of saving a web request, so not inlining the chunk
 // makes for a smoother build process.
-const shouldInlineRuntimeChunk = process.env.INLINE_RUNTIME_CHUNK !== 'false';
+// const shouldInlineRuntimeChunk = process.env.INLINE_RUNTIME_CHUNK !== 'false';
 // `publicUrl` is just like `publicPath`, but we will provide it to our app
 // as %PUBLIC_URL% in `index.html` and `process.env.PUBLIC_URL` in JavaScript.
 // Omit trailing slash as %PUBLIC_URL%/xyz looks better than %PUBLIC_URL%xyz.
@@ -57,6 +57,7 @@ const publicUrl = config.build.publicUrl;
 // Get environment variables to inject into our app.
 // const env = getClientEnvironment(publicUrl);
 const env = utils.getClientEnvironment(config.build.publicUrl);
+env.stringified["process.env"].px2rem=config.build.px2rem;
 
 // Assert this just to be safe.
 // Development builds of React are slow and not intended for production.
@@ -90,28 +91,34 @@ const getStyleLoaders = (cssOptions, preProcessor) => {
             loader: require.resolve('css-loader'),
             options: cssOptions,
         },
-        {
-            // Options for PostCSS as we reference these options twice
-            // Adds vendor prefixing based on your specified browser support in
-            // package.json
-            loader: require.resolve('postcss-loader'),
-            options: {
-                // Necessary for external CSS imports to work
-                // https://github.com/facebook/create-react-app/issues/2677
-                ident: 'postcss',
-                plugins: () => [
-                    require('postcss-flexbugs-fixes'),
-                    require('postcss-preset-env')({
-                        autoprefixer: {
-                            flexbox: 'no-2009',
-                        },
-                        stage: 3,
-                    }),
-                ],
-                sourceMap: shouldUseSourceMap,
-            },
-        },
     ];
+    if(config.build.px2rem){
+        loaders.push({
+                loader: 'px2rem-loader',
+                // options here
+                options: config.build.px2remOptions
+        });
+    }
+    loaders.push({
+        // Options for PostCSS as we reference these options twice
+        // Adds vendor prefixing based on your specified browser support in
+        // package.json
+        loader: require.resolve('postcss-loader'),
+        options: {
+            // Necessary for external CSS imports to work
+            // https://github.com/facebook/create-react-app/issues/2677
+            ident: 'postcss',
+            plugins: () => [
+                require('postcss-flexbugs-fixes'),
+                require('postcss-preset-env')({
+                    autoprefixer: {
+                        flexbox: 'no-2009',
+                    },
+                    stage: 3,
+                }),
+            ],
+        },
+    })
     if (preProcessor) {
         loaders.push({
             loader: require.resolve(preProcessor),
@@ -294,7 +301,7 @@ module.exports = {
                 include: [resolve('src')],
             },
             {
-                test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
+                test: /\.(png|jpe?g|gif|svg|webp)(\?.*)?$/,
                 loader: 'url-loader',
                 options: {
                     limit: 10000,
@@ -419,7 +426,9 @@ module.exports = {
         // if (process.env.NODE_ENV === 'production') { ... }. See `./env.js`.
         // It is absolutely essential that NODE_ENV was set to production here.
         // Otherwise React will be compiled in the very slow development mode.
-        new webpack.DefinePlugin(env.stringified),
+        new webpack.DefinePlugin(
+            env.stringified,
+        ),
         new MiniCssExtractPlugin({
             // Options similar to the same options in webpackOptions.output
             // both options are optional
@@ -442,7 +451,7 @@ module.exports = {
         new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
         // Generate a service worker script that will precache, and keep up to date,
         // the HTML & assets that are part of the Webpack build.
-        new WorkboxWebpackPlugin.GenerateSW({
+        config.build.useServiceWorker && new WorkboxWebpackPlugin.GenerateSW({
             clientsClaim: true,
             exclude: [/\.map$/, /asset-manifest\.json$/],
             importWorkboxFrom: 'cdn',

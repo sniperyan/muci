@@ -38,6 +38,7 @@ const publicUrl = config.dev.publicUrl;
 // Get environment variables to inject into our app.
 // const env = getClientEnvironment(publicUrl);
 const env = utils.getClientEnvironment(config.dev.publicUrl);
+env.stringified["process.env"].px2rem = config.dev.px2rem;
 
 // // Check if TypeScript is setup
 // const useTypeScript = fs.existsSync(paths.appTsConfig);
@@ -60,27 +61,34 @@ const getStyleLoaders = (cssOptions, preProcessor) => {
             loader: require.resolve('css-loader'),
             options: cssOptions,
         },
-        {
-            // Options for PostCSS as we reference these options twice
-            // Adds vendor prefixing based on your specified browser support in
-            // package.json
-            loader: require.resolve('postcss-loader'),
-            options: {
-                // Necessary for external CSS imports to work
-                // https://github.com/facebook/create-react-app/issues/2677
-                ident: 'postcss',
-                plugins: () => [
-                    require('postcss-flexbugs-fixes'),
-                    require('postcss-preset-env')({
-                        autoprefixer: {
-                            flexbox: 'no-2009',
-                        },
-                        stage: 3,
-                    }),
-                ],
-            },
-        },
     ];
+    if(config.dev.px2rem){
+        loaders.push({
+                loader: 'px2rem-loader',
+                // options here
+                options: config.dev.px2remOptions
+        });
+    }
+    loaders.push({
+        // Options for PostCSS as we reference these options twice
+        // Adds vendor prefixing based on your specified browser support in
+        // package.json
+        loader: require.resolve('postcss-loader'),
+        options: {
+            // Necessary for external CSS imports to work
+            // https://github.com/facebook/create-react-app/issues/2677
+            ident: 'postcss',
+            plugins: () => [
+                require('postcss-flexbugs-fixes'),
+                require('postcss-preset-env')({
+                    autoprefixer: {
+                        flexbox: 'no-2009',
+                    },
+                    stage: 3,
+                }),
+            ],
+        },
+    })
     if (preProcessor) {
         loaders.push(require.resolve(preProcessor));
     }
@@ -123,7 +131,7 @@ module.exports = {
         // containing code from all our entry points, and the Webpack runtime.
         filename: utils.assetsPath('js/[name].js'),
         // There are also additional JS chunk files if you use code splitting.
-        chunkFilename: utils.assetsPath('js/[name].chunk.js'), 
+        chunkFilename: utils.assetsPath('js/[name].chunk.js'),
         // This is the URL that app is served from. We use "/" in development.
         publicPath: publicPath,
         // Point sourcemap entries to original disk location (format as URL on Windows)
@@ -214,7 +222,7 @@ module.exports = {
                 include: [resolve('src')],
             },
             {
-                test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
+                test: /\.(png|jpe?g|gif|svg|webp)(\?.*)?$/,
                 loader: 'url-loader',
                 options: {
                     limit: 10000,
@@ -290,7 +298,7 @@ module.exports = {
                 exclude: lessModuleRegex,
                 use: getStyleLoaders({ importLoaders: 2 }, 'less-loader'),
             },
-            
+
             {
                 test: lessModuleRegex,
                 use: getStyleLoaders(
@@ -320,7 +328,9 @@ module.exports = {
         new ModuleNotFoundPlugin(resolve('./')),
         // Makes some environment variables available to the JS code, for example:
         // if (process.env.NODE_ENV === 'development') { ... }. See `./env.js`.
-        new webpack.DefinePlugin(env.stringified),
+        new webpack.DefinePlugin(
+            env.stringified
+        ),
         // This is necessary to emit hot updates (currently CSS only):
         new webpack.HotModuleReplacementPlugin(),
         // Watcher doesn't work well if you mistype casing in a path so we use
@@ -345,7 +355,7 @@ module.exports = {
             fileName: 'asset-manifest.json',
             publicPath: publicPath,
         }),
-        
+
     ].filter(Boolean),
 
     // Some libraries import Node modules but don't use them in the browser.

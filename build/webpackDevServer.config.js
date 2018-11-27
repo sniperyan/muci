@@ -9,8 +9,8 @@ const ignoredFiles = require('../dev-utils/ignoredFiles');
 const config = require('../config');
 const fs = require('fs');
 
-const protocol = process.env.HTTPS === 'true' ? 'https' : 'http';
-const host = process.env.HOST || '0.0.0.0';
+const protocol = config.dev.useHttps === true ? 'https' : 'http';
+const host = config.dev.host;
 const utils = require('./utils');
 function resolve(dir) {
     return utils.resolve(dir);
@@ -35,7 +35,7 @@ module.exports = function (proxy, allowedHost) {
         // specified the `proxy` setting. Finally, we let you override it if you
         // really know what you're doing with a special environment variable.
         disableHostCheck:
-            !proxy || process.env.DANGEROUSLY_DISABLE_HOST_CHECK === 'true',
+            !proxy || config.dev.disableHostCheck,
         // Enable gzip compression of generated files.
         compress: true,
         // Silence WebpackDevServer's own logs since they're generally not useful.

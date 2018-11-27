@@ -1,9 +1,26 @@
-import Loading from '../../components/common/loading';
-import Loadable from 'react-loadable';
+import React, { PureComponent } from 'react';
+import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 
-const AboutAPP = Loadable({
-  loader: () => import('./app'),
-  loading: Loading,
-});
+@connect(
+  state => ({
+    
+  }),
+  {},
+)
+class About extends PureComponent {
+  static propTypes = {
+   
+  }
+  componentWillMount() {}
+  render() {
+    return (
+      <div>
+        <h1>About</h1>
+        <Link to="/home">To Home</Link>
+      </div>
+    );
+  }
+}
 
-export default AboutAPP;
+export default About;
