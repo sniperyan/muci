@@ -39,6 +39,7 @@ const publicUrl = config.dev.publicUrl;
 // const env = getClientEnvironment(publicUrl);
 const env = utils.getClientEnvironment(config.dev.publicUrl);
 env.stringified["process.env"].px2rem = config.dev.px2rem;
+env.stringified["process.env"].port = config.dev.port;
 
 // // Check if TypeScript is setup
 // const useTypeScript = fs.existsSync(paths.appTsConfig);
