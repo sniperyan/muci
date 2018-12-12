@@ -17,20 +17,21 @@ module.exports = {
     //静态资源二级目录名称
     assetsSubDirectory: 'static',   
     // CDN 地址
-    assetsPublicPath: '/',   
+    publicPath: '/',
     //设置代理 https://webpack.js.org/configuration/dev-server/#devserver-proxy
     proxyTable: {
       proxy: {
         '/proxy': {
           target: 'https://cnodejs.org',
           pathRewrite: {'^/proxy' : ''},
+          changeOrigin: true, //The origin of the host header is kept when proxying by default, you can set changeOrigin to true to override this behaviour.
           secure: false,  //A backend server running on HTTPS with an invalid certificate will not be accepted by default
         },
       },
     },
 
     //do not check the host are vulnerable to DNS rebinding attacks
-    disableHostCheck:false,
+    disableHostCheck:true,
 
    
     // Template for index.html
@@ -49,9 +50,9 @@ module.exports = {
     // if port is in use, a free one will be determined
     port: 8080, 
     // use px2rem
-    px2rem:true,
+    px2rem:false,
     //https://github.com/songsiqi/px2rem
-    px2remOptions:{},
+    px2remOptions:{},  //rem unit value (default: 75)
     //自动打开浏览器
     autoOpenBrowser: false,   
 
@@ -60,10 +61,6 @@ module.exports = {
      */
     // https://webpack.js.org/configuration/devtool/#development
     devtool: 'cheap-module-source-map',
-
-    // Webpack uses `publicPath` to determine where the app is being served from.
-    // In development, we always serve from the root. This makes config easier.
-    publicPath:'',
 
     // `publicUrl` is just like `publicPath`, but we will provide it to our app
     // as %PUBLIC_URL% in `index.html` and `process.env.PUBLIC_URL` in JavaScript.
@@ -85,7 +82,7 @@ module.exports = {
     //静态资源二级目录名称
     assetsSubDirectory: 'static',
     // CDN 地址
-    assetsPublicPath: '/',
+    publicPath: '/',
 
     // Template for index.html
     appHtml: resolve('../public/index.html'),
@@ -94,7 +91,7 @@ module.exports = {
       'react-native': 'react-native-web',
     },
     // use px2rem
-    px2rem:true,
+    px2rem:false,
     //https://github.com/songsiqi/px2rem
     px2remOptions:{},
     /**
@@ -106,9 +103,6 @@ module.exports = {
     //serviceworker
     useServiceWorker:false,
 
-    // Webpack uses `publicPath` to determine where the app is being served from.
-    // It requires a trailing slash, or the file assets will get an incorrect path.
-    publicPath:'',
     
     // `publicUrl` is just like `publicPath`, but we will provide it to our app
     // as %PUBLIC_URL% in `index.html` and `process.env.PUBLIC_URL` in JavaScript.
